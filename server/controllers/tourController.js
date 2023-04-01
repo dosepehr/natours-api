@@ -4,15 +4,28 @@ import Tour from '../models/TourModel.js';
 export const getTours = async (req, res) => {
     try {
         const result = await Tour.find({});
-        res.send(result);
+        res.status(201).send(result);
     } catch (err) {
         console.log(err);
         res.status(501).send(null);
     }
 };
 
-// * creating a new tour
+// * getting one user
+export const getTour = async (req, res) => {
+    try {
+        const result = await Tour.findById(req.headers.authorization);
+        res.status(201).json(result);
+    } catch (err) {
+        console.log(err);
+        res.status(501).send(null);
+    }
+};
 
+
+
+
+// * creating a new tour
 export const createTour = async (req, res) => {
     try {
         const result = await Tour.create({
