@@ -15,20 +15,33 @@ export const getTours = async (req, res) => {
 export const getTour = async (req, res) => {
     try {
         const result = await Tour.findById(req.headers.authorization);
-        res.status(201).json(result);
+        res.status(201).send(result);
     } catch (err) {
         console.log(err);
         res.status(501).send(null);
     }
 };
 
-
-
-
 // * creating a new tour
 export const createTour = async (req, res) => {
     try {
         const result = await Tour.create({
+            name: req.body.name,
+            rating: req.body.rating,
+            price: req.body.price,
+        });
+        res.status(201).send(result);
+    } catch (err) {
+        console.log(err);
+        res.status(501).send(null);
+    }
+};
+
+// * updating tour
+
+export const updateTour = async (req, res) => {
+    try {
+        const result = await Tour.findByIdAndUpdate(req.headers.authorization, {
             name: req.body.name,
             rating: req.body.rating,
             price: req.body.price,
