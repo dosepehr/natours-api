@@ -52,3 +52,14 @@ export const updateTour = async (req, res) => {
         res.status(501).send(null);
     }
 };
+// * deleting tour
+
+export const deleteTour = async (req, res) => {
+    try {
+        const result = await Tour.findByIdAndDelete(req.headers.authorization);
+        res.status(201).send(result);
+    } catch (err) {
+        console.log(err);
+        res.status(501).send(null);
+    }
+};

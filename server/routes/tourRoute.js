@@ -1,6 +1,7 @@
 import express from 'express';
 import {
     createTour,
+    deleteTour,
     getTour,
     getTours,
     updateTour,
@@ -9,7 +10,12 @@ import {
 const tourRoute = express.Router();
 
 // * Route --> http://localhost:5000/api/v1/tours
-tourRoute.route('/').get(getTours).post(createTour).put(updateTour);
+tourRoute
+    .route('/')
+    .get(getTours)
+    .post(createTour)
+    .put(updateTour)
+    .delete(deleteTour);
 
 // * Route --> http://localhost:5000/api/v1/tours/main
 tourRoute.route('/main').get(getTour);
