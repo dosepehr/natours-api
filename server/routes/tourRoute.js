@@ -1,9 +1,9 @@
 import express from 'express';
-import { getTours } from '../controllers/tourController.js';
+import { createTour, getTours } from '../controllers/tourController.js';
 
 const tourRoute = express.Router();
 
 // * Route --> http://localhost:5000/api/v1/tours
-tourRoute.route('/').get(getTours)
+tourRoute.route('/').get(getTours).post(createTour)
 
 export default tourRoute;
