@@ -25,11 +25,7 @@ export const getTour = async (req, res) => {
 // * creating a new tour
 export const createTour = async (req, res) => {
     try {
-        const result = await Tour.create({
-            name: req.body.name,
-            rating: req.body.rating,
-            price: req.body.price,
-        });
+        const result = await Tour.create(req.body);
         res.status(201).send(result);
     } catch (err) {
         console.log(err);
@@ -41,11 +37,10 @@ export const createTour = async (req, res) => {
 
 export const updateTour = async (req, res) => {
     try {
-        const result = await Tour.findByIdAndUpdate(req.headers.authorization, {
-            name: req.body.name,
-            rating: req.body.rating,
-            price: req.body.price,
-        });
+        const result = await Tour.findByIdAndUpdate(
+            req.headers.authorization,
+            req.body
+        );
         res.status(201).send(result);
     } catch (err) {
         console.log(err);
