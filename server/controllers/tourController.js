@@ -3,8 +3,18 @@ import Tour from '../models/TourModel.js';
 // * getting all tours
 export const getTours = async (req, res) => {
     try {
-        const result = await Tour.find({});
-        res.status(201).send(result);
+        // ! a hard copy of req.query
+        const queryObj = { ...req.query };
+        const excludedFields = ['page', 'sort', 'limit', 'fields'];
+
+        // ! deleting those fields from req.query
+        excludedFields.forEach((el) => delete queryObj[el]);
+        
+        const query = Tour.find(queryObj);
+
+        const result = await query;
+
+        res.status(200).send({ length: result.length, result });
     } catch (err) {
         console.log(err);
         res.status(501).send(null);
@@ -15,7 +25,7 @@ export const getTours = async (req, res) => {
 export const getTour = async (req, res) => {
     try {
         const result = await Tour.findById(req.headers.authorization);
-        res.status(201).send(result);
+        res.status(200).send(result);
     } catch (err) {
         console.log(err);
         res.status(501).send(null);
@@ -41,7 +51,7 @@ export const updateTour = async (req, res) => {
             req.headers.authorization,
             req.body
         );
-        res.status(201).send(result);
+        res.status(200).send(result);
     } catch (err) {
         console.log(err);
         res.status(501).send(null);
@@ -52,7 +62,7 @@ export const updateTour = async (req, res) => {
 export const deleteTour = async (req, res) => {
     try {
         const result = await Tour.findByIdAndDelete(req.headers.authorization);
-        res.status(201).send(result);
+        res.status(200).send(result);
     } catch (err) {
         console.log(err);
         res.status(501).send(null);
