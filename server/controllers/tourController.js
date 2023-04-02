@@ -3,20 +3,26 @@ import Tour from '../models/TourModel.js';
 // * getting all tours
 export const getTours = async (req, res) => {
     try {
-        // ! a hard copy of req.query
+        // * 1) simple filtering
         const queryObj = { ...req.query };
         const excludedFields = ['page', 'sort', 'limit', 'fields'];
-
-        // ! deleting those fields from req.query
         excludedFields.forEach((el) => delete queryObj[el]);
 
-        // * advanced filtering
+        // * 2) advanced filtering
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(
             /\b(gte|gt|lte|lt)\b/g,
             (match) => `$${match}`
         );
-        const query = Tour.find(JSON.parse(queryStr));
+        let query = Tour.find(JSON.parse(queryStr));
+
+        // * 3) sorting
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(',').join(' ');
+            query = query.sort(sortBy);
+        } else {
+            query = query.sort('-createdAt');
+        }
 
         const result = await query;
 
