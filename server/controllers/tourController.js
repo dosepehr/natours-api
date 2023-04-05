@@ -1,4 +1,5 @@
 import Tour from '../models/TourModel.js';
+import APIFeatures from '../utils/apiFeatures.js';
 
 // * alias for top tours
 
@@ -6,49 +7,19 @@ export const topToursAlias = (req, res, next) => {
     req.query.limit = '5';
     req.query.sort = '-ratingsAverage,price';
     req.query.fields = 'name,price,ratingsAverage,summery,difficulty';
-    next()
+    next();
 };
 
 // * getting all tours
 export const getTours = async (req, res) => {
     try {
-        // * 1) simple filtering
-        const queryObj = { ...req.query };
-        const excludedFields = ['page', 'sort', 'limit', 'fields'];
-        excludedFields.forEach((el) => delete queryObj[el]);
+        const features = new APIFeatures(Tour.find(), req.query)
+            .filter()
+            .sort()
+            .limit()
+            .paginate();
 
-        // * 2) advanced filtering
-        let queryStr = JSON.stringify(queryObj);
-        queryStr = queryStr.replace(
-            /\b(gte|gt|lte|lt)\b/g,
-            (match) => `$${match}`
-        );
-        let query = Tour.find(JSON.parse(queryStr));
-
-        // * 3) sorting
-        if (req.query.sort) {
-            const sortBy = req.query.sort.split(',').join(' ');
-            query = query.sort(sortBy);
-        } else {
-            query = query.sort('-createdAt');
-        }
-
-        // * 4) fields limiting
-        if (req.query.fields) {
-            const fields = req.query.fields.split(',').join(' ');
-            query = query.select(fields);
-        } else {
-            query = query.select('-__v');
-        }
-
-        // * 5) pagination
-        const page = +req.query.page || 1;
-        const limit = +req.query.limit || 100;
-        const skip = (page - 1) * limit;
-
-        query = query.skip(skip).limit(limit);
-
-        const result = await query;
+        const result = await features.query;
 
         res.status(200).send({ length: result.length, result });
     } catch (err) {
