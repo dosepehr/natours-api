@@ -4,6 +4,7 @@ import {
     deleteTour,
     getTour,
     getTours,
+    topToursAlias,
     updateTour,
 } from '../controllers/tourController.js';
 
@@ -16,6 +17,8 @@ tourRoute
     .post(createTour)
     .put(updateTour)
     .delete(deleteTour);
+
+tourRoute.route('/top-tours').get(topToursAlias, getTours);
 
 // * Route --> http://localhost:5000/api/v1/tours/main
 tourRoute.route('/main').get(getTour);
