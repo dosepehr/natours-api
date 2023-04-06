@@ -1,6 +1,6 @@
 import Tour from '../models/TourModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
-
+import isEmail from 'validator/lib/isEmail.js';
 // * alias for top tours
 
 export const topToursAlias = (req, res, next) => {
@@ -43,10 +43,13 @@ export const getTour = async (req, res) => {
 export const createTour = async (req, res) => {
     try {
         const result = await Tour.create(req.body);
+
         res.status(201).send(result);
     } catch (err) {
-        console.log(err);
-        res.status(501).send(null);
+        res.status(501).json({
+            status: 'fail',
+            message: err,
+        });
     }
 };
 
@@ -56,7 +59,11 @@ export const updateTour = async (req, res) => {
     try {
         const result = await Tour.findByIdAndUpdate(
             req.headers.authorization,
-            req.body
+            req.body,
+            {
+                new: true,
+                runValidators: true,
+            }
         );
         res.status(200).send(result);
     } catch (err) {

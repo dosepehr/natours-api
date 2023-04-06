@@ -17,7 +17,7 @@ tourRoute
     .route('/')
     .get(getTours)
     .post(createTour)
-    .put(updateTour)
+    .patch(updateTour)
     .delete(deleteTour);
 
 // * Route --> http://localhost:5000/api/v1/tours/main
