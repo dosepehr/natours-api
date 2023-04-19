@@ -88,13 +88,16 @@ export const getTourStats = async (req, res) => {
         const stats = await Tour.aggregate([
             {
                 $match: {
+                    //! select documents that match this condition
                     ratingsAverage: {
                         $gte: 4.5,
                     },
                 },
             },
             {
+                // !group data
                 $group: {
+                    // ! group by what 
                     _id: null,
                     // _id: '$difficulty',
                     numTours: { $sum: 1 },
@@ -133,7 +136,7 @@ export const getMonthlyPlan = async (req, res) => {
                         $gte: new Date(`${year}-01-01`),
                         $lte: new Date(`${year}-12-31`),
                     },
-                },
+                }, 
             },
             {
                 $group: {
