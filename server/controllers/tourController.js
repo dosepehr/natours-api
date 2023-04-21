@@ -1,5 +1,6 @@
 import Tour from '../models/TourModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
+import ErrorHandler from '../utils/errorHandler.js';
 import { catchAsync } from '../utils/catchAsync.js';
 // * alias for top tours
 
@@ -25,7 +26,12 @@ export const getTours = catchAsync(async (req, res, next) => {
 
 // * getting one user
 export const getTour = catchAsync(async (req, res, next) => {
-    const result = await Tour.findById(req.headers.authorization);
+    const result = await Tour.findById(req.params.id);
+
+    if (!result) {
+        return next(new ErrorHandler('no', 404));
+    }
+
     res.status(200).send(result);
 });
 
@@ -47,12 +53,18 @@ export const updateTour = catchAsync(async (req, res, next) => {
             runValidators: true,
         }
     );
+    if (!result) {
+        return next(new ErrorHandler('no tour dound with this Id ', 404));
+    }
     res.status(200).send(result);
 });
 // * deleting tour
 
 export const deleteTour = catchAsync(async (req, res, next) => {
     const result = await Tour.findByIdAndDelete(req.headers.authorization);
+    if (!result) {
+        return next(new ErrorHandler('no tour dound with this Id ', 404));
+    }
     res.status(200).send(result);
 });
 

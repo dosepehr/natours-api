@@ -21,7 +21,7 @@ tourRoute
     .delete(deleteTour);
 
 // * Route --> http://localhost:5000/api/v1/tours/main
-tourRoute.route('/main').get(getTour);
+tourRoute.route('/main/:id').get(getTour);
 
 //  * Route --> http://localhost:5000/api/v1/tours/top-tours
 tourRoute.route('/top-tours').get(topToursAlias, getTours);
