@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import tourRoute from './routes/TourRoute.js';
+import ErrorHandler from './utils/errorHandler.js';
 
 const server = express();
 // * middlewares
@@ -22,12 +23,11 @@ mongoose.Promise = global.Promise;
 server.use('/api/v1/tours', tourRoute);
 
 // * a route for undefined routes
-server.all('*', (req, res) => {
-    res.status(404).send({
-        status: 'fail',
-        message: `can't find ${req.originalUrl} on this server`,
-    });
+server.all('*', (req, res, next) => {
+    next(new ErrorHandler(`can't fint ${req.originalUrl} on this server`, 404));
 });
+
+
 
 // * run server on port
 const port = process.env.PORT || 5080;
