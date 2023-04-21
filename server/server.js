@@ -21,6 +21,13 @@ mongoose.Promise = global.Promise;
 // * routes
 server.use('/api/v1/tours', tourRoute);
 
+// * a route for undefined routes
+server.all('*', (req, res) => {
+    res.status(404).send({
+        status: 'fail',
+        message: `can't find ${req.originalUrl} on this server`,
+    });
+});
 
 // * run server on port
 const port = process.env.PORT || 5080;
