@@ -46,7 +46,7 @@ export const createTour = catchAsync(async (req, res, next) => {
 
 export const updateTour = catchAsync(async (req, res, next) => {
     const result = await Tour.findByIdAndUpdate(
-        req.headers.authorization,
+        req.params.id,
         req.body,
         {
             new: true,
@@ -61,7 +61,7 @@ export const updateTour = catchAsync(async (req, res, next) => {
 // * deleting tour
 
 export const deleteTour = catchAsync(async (req, res, next) => {
-    const result = await Tour.findByIdAndDelete(req.headers.authorization);
+    const result = await Tour.findByIdAndDelete(req.params.id);
     if (!result) {
         return next(new ErrorHandler('no tour dound with this Id ', 404));
     }

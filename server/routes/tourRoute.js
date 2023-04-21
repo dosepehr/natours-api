@@ -13,12 +13,10 @@ import {
 const tourRoute = express.Router();
 
 // * Route --> http://localhost:5000/api/v1/tours
-tourRoute
-    .route('/')
-    .get(getTours)
-    .post(createTour)
-    .patch(updateTour)
-    .delete(deleteTour);
+tourRoute.route('/').get(getTours).post(createTour);
+
+// * Route --> http://localhost:5000/api/v1/tours
+tourRoute.route('/:id').patch(updateTour).delete(deleteTour);
 
 // * Route --> http://localhost:5000/api/v1/tours/main
 tourRoute.route('/main/:id').get(getTour);
