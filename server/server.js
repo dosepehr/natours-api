@@ -11,7 +11,9 @@ import { errorController } from './controllers/errorController.js';
 const server = express();
 // * middlewares
 dotenv.config({ path: './config.env' });
-server.use(morgan('dev'));
+if (process.env.NODE_ENV == 'development') {
+    server.use(morgan('dev'));
+}
 server.use(cors());
 server.use(bodyParser.json());
 
