@@ -6,6 +6,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import tourRoute from './routes/TourRoute.js';
 import ErrorHandler from './utils/errorHandler.js';
+import { errorController } from './controllers/errorController.js';
 
 const server = express();
 // * middlewares
@@ -27,7 +28,7 @@ server.all('*', (req, res, next) => {
     next(new ErrorHandler(`can't fint ${req.originalUrl} on this server`, 404));
 });
 
-
+server.use(errorController);
 
 // * run server on port
 const port = process.env.PORT || 5080;
