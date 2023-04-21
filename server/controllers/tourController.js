@@ -1,6 +1,6 @@
 import Tour from '../models/TourModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
-import isEmail from 'validator/lib/isEmail.js';
+import { catchAsync } from '../utils/catchAsync.js';
 // * alias for top tours
 
 export const topToursAlias = (req, res, next) => {
@@ -40,18 +40,11 @@ export const getTour = async (req, res) => {
 };
 
 // * creating a new tour
-export const createTour = async (req, res) => {
-    try {
-        const result = await Tour.create(req.body);
+export const createTour = catchAsync(async (req, res) => {
+    const result = await Tour.create(req.body);
 
-        res.status(201).send(result);
-    } catch (err) {
-        res.status(501).json({
-            status: 'fail',
-            message: err,
-        });
-    }
-};
+    res.status(201).send(result);
+});
 
 // * updating tour
 
@@ -97,7 +90,7 @@ export const getTourStats = async (req, res) => {
             {
                 // !group data
                 $group: {
-                    // ! group by what 
+                    // ! group by what
                     _id: null,
                     // _id: '$difficulty',
                     numTours: { $sum: 1 },
@@ -136,7 +129,7 @@ export const getMonthlyPlan = async (req, res) => {
                         $gte: new Date(`${year}-01-01`),
                         $lte: new Date(`${year}-12-31`),
                     },
-                }, 
+                },
             },
             {
                 $group: {
