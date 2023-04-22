@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import tourRoute from './routes/TourRoute.js';
+import userRoute from './routes/userRoute.js';
 import ErrorHandler from './utils/errorHandler.js';
 import { errorController } from './controllers/errorController.js';
 
@@ -24,6 +25,7 @@ mongoose.connect(process.env.MONGO_URL).then(() => {
 mongoose.Promise = global.Promise;
 // * routes
 server.use('/api/v1/tours', tourRoute);
+server.use('/api/v1/users', userRoute);
 
 // * a route for undefined routes
 server.all('*', (req, res, next) => {
