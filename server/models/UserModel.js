@@ -13,7 +13,7 @@ const UserSchema = mongoose.Schema({
         trim: true,
         unique: true,
         lowercase: true,
-        validator: [validator.isEmail, 'please provide a valid email'],
+        validate: [validator.isEmail, 'please provide a valid email'],
     },
     photo: {
         type: String,
@@ -29,6 +29,13 @@ const UserSchema = mongoose.Schema({
         required: true,
         trim: true,
         minLength: 8,
+
+        validate: {
+            validator: function (el) {
+                return el === this.password;
+            },
+            message: 'passwords are not the same',
+        },
     },
 });
 
