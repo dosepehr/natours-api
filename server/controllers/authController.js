@@ -1,9 +1,7 @@
 import User from '../models/UserModel.js';
 import { catchAsync } from '../utils/catchAsync.js';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import ErrorHandler from '../utils/errorHandler.js';
-dotenv.config({ path: './config.env' });
+import { signToken } from '../utils/signToken.js';
 
 export const signup = catchAsync(async (req, res, next) => {
     const { name, email, password, confirmPassword } = req.body;
@@ -13,9 +11,7 @@ export const signup = catchAsync(async (req, res, next) => {
         password,
         confirmPassword,
     });
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES,
-    });
+    const token = signToken(newUser._id);
     res.status(201).json({
         status: 'success',
         token,
@@ -37,7 +33,7 @@ export const login = catchAsync(async (req, res, next) => {
         return next(new ErrorHandler('incorrect email or password', 401));
     }
     // ! if everything was ok,send the token
-    const token = '';
+    const token = signToken(user._id);
     res.status(200).json({
         status: 'success',
         token,
