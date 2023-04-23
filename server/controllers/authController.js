@@ -2,6 +2,10 @@ import User from '../models/UserModel.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import ErrorHandler from '../utils/errorHandler.js';
 import { signToken } from '../utils/signToken.js';
+import jwt from 'jsonwebtoken';
+import { promisify } from 'util';
+import dotenv from 'dotenv';
+dotenv.config({ path: './config.env' });
 
 export const signup = catchAsync(async (req, res, next) => {
     const { name, email, password, confirmPassword } = req.body;
@@ -52,8 +56,8 @@ export const protect = catchAsync(async (req, res, next) => {
     if (!token) {
         return next(new ErrorHandler('you are not logged in!', 401));
     }
-    console.log(token);
     // validating token
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
     // check if user still exists
     // check if user changed pass after token was issued
     next();
