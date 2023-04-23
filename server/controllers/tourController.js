@@ -45,14 +45,10 @@ export const createTour = catchAsync(async (req, res, next) => {
 // * updating tour
 
 export const updateTour = catchAsync(async (req, res, next) => {
-    const result = await Tour.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {
-            new: true,
-            runValidators: true,
-        }
-    );
+    const result = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+    });
     if (!result) {
         return next(new ErrorHandler('no tour dound with this Id ', 404));
     }

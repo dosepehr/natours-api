@@ -10,10 +10,12 @@ import {
     updateTour,
 } from '../controllers/tourController.js';
 
+import { protect } from '../controllers/authController.js';
+
 const tourRoute = express.Router();
 
 // * Route --> http://localhost:5000/api/v1/tours
-tourRoute.route('/').get(getTours).post(createTour);
+tourRoute.route('/').get(protect, getTours).post(createTour);
 
 // * Route --> http://localhost:5000/api/v1/tours
 tourRoute.route('/:id').patch(updateTour).delete(deleteTour);

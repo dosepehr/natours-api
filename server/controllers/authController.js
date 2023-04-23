@@ -39,3 +39,22 @@ export const login = catchAsync(async (req, res, next) => {
         token,
     });
 });
+
+export const protect = catchAsync(async (req, res, next) => {
+    // getting token
+    let token;
+    if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith('Bearer')
+    ) {
+        token = req.headers.authorization.split(' ')[1];
+    }
+    if (!token) {
+        return next(new ErrorHandler('you are not logged in!', 401));
+    }
+    console.log(token);
+    // validating token
+    // check if user still exists
+    // check if user changed pass after token was issued
+    next();
+});
