@@ -12,6 +12,6 @@ userRoute.route('/signup').post(signup);
 userRoute.route('/login').post(login);
 
 userRoute.route('/forgotPassword').post(forgotPassword);
-userRoute.route('/resetPassword').patch(resetPassword);
+userRoute.route('/resetPassword/:token').patch(resetPassword);
 
 export default userRoute;
