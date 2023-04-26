@@ -8,12 +8,15 @@ import dotenv from 'dotenv';
 dotenv.config({ path: './config.env' });
 
 export const signup = catchAsync(async (req, res, next) => {
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password, confirmPassword, role, passwordChangedAt } =
+        req.body;
     const newUser = await User.create({
         name,
         email,
         password,
         confirmPassword,
+        role,
+        passwordChangedAt,
     });
     const token = signToken(newUser._id);
     res.status(201).json({
@@ -82,3 +85,18 @@ export const protect = catchAsync(async (req, res, next) => {
     req.user = currentUser;
     next();
 });
+
+export const restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return next(
+                new ErrorHandler(
+                    'You do not have permission to perform this action',
+                    403
+                )
+            );
+        }
+
+        next();
+    };
+};

@@ -10,7 +10,7 @@ import {
     updateTour,
 } from '../controllers/tourController.js';
 
-import { protect } from '../controllers/authController.js';
+import { protect, restrictTo } from '../controllers/authController.js';
 
 const tourRoute = express.Router();
 
@@ -18,7 +18,10 @@ const tourRoute = express.Router();
 tourRoute.route('/').get(protect, getTours).post(createTour);
 
 // * Route --> http://localhost:5000/api/v1/tours
-tourRoute.route('/:id').patch(updateTour).delete(deleteTour);
+tourRoute
+    .route('/:id')
+    .patch(updateTour)
+    .delete(protect, restrictTo('admin', 'lead-guide'), deleteTour);
 
 // * Route --> http://localhost:5000/api/v1/tours/main
 tourRoute.route('/main/:id').get(getTour);
