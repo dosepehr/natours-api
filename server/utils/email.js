@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config({ path: './config.env' });
 
 export const sendEmail = async (options) => {
@@ -19,7 +19,7 @@ export const sendEmail = async (options) => {
         to: options.email,
         subject: options.subject,
         text: options.message,
-        // html:
+        // html: '<p style="background: red;">hello there</p>',
     };
 
     // 3) Actually send the email
