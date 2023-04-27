@@ -5,6 +5,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit';
 import tourRoute from './routes/TourRoute.js';
 import userRoute from './routes/userRoute.js';
@@ -31,6 +33,11 @@ if (process.env.NODE_ENV == 'development') {
 server.use(cors());
 // ! body-parser for getting date from req.body
 server.use(bodyParser.json({ limit: '10kb' }));
+
+// * data sanitization against NoSQL query injection
+server.use(mongoSanitize());
+// * data sanitization against XSS
+server.use(xss());
 
 // * connection
 mongoose.connect(process.env.MONGO_URL).then(() => {
