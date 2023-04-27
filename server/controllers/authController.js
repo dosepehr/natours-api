@@ -1,7 +1,7 @@
 import User from '../models/UserModel.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import ErrorHandler from '../utils/errorHandler.js';
-import { signToken } from '../utils/signToken.js';
+import { createSendToken } from '../utils/createSendToken.js';
 import { sendEmail } from '../utils/email.js';
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
@@ -20,12 +20,8 @@ export const signup = catchAsync(async (req, res, next) => {
         role,
         passwordChangedAt,
     });
-    const token = signToken(newUser._id);
-    res.status(201).json({
-        status: 'success',
-        token,
-        user: newUser,
-    });
+
+    createSendToken(newUser, 201, res);
 });
 
 export const login = catchAsync(async (req, res, next) => {
@@ -42,11 +38,7 @@ export const login = catchAsync(async (req, res, next) => {
         return next(new ErrorHandler('incorrect email or password', 401));
     }
     // ! if everything was ok,send the token
-    const token = signToken(user._id);
-    res.status(200).json({
-        status: 'success',
-        token,
-    });
+    createSendToken(user, 200, res);
 });
 
 export const protect = catchAsync(async (req, res, next) => {
@@ -173,10 +165,6 @@ export const resetPassword = catchAsync(async (req, res, next) => {
 
     // 3) Update changedPasswordAt property for the user
     // 4) Log the user in, send JWT
-    // createSendToken(user, 200, res);
-    const token = signToken(user._id);
-    res.status(200).json({
-        status: 'success',
-        token,
-    });
+    createSendToken(user, 200, res);
 });
+

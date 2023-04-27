@@ -39,6 +39,7 @@ const UserSchema = mongoose.Schema({
         minLength: 8,
 
         validate: {
+            // this only works on CREATE and SAVE !!!
             validator: function (el) {
                 return el === this.password;
             },
