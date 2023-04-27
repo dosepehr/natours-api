@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
+import hpp from 'hpp';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit';
@@ -38,6 +39,19 @@ server.use(bodyParser.json({ limit: '10kb' }));
 server.use(mongoSanitize());
 // * data sanitization against XSS
 server.use(xss());
+// * Prevent parameter pollution
+server.use(
+    hpp({
+        whitelist: [
+            'duration',
+            'ratingsQuantity',
+            'ratingsAverage',
+            'maxGroupSize',
+            'difficulty',
+            'price',
+        ],
+    })
+);
 
 // * connection
 mongoose.connect(process.env.MONGO_URL).then(() => {
