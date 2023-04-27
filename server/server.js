@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import rateLimit from 'express-rate-limit';
 import tourRoute from './routes/TourRoute.js';
 import userRoute from './routes/userRoute.js';
 import ErrorHandler from './utils/errorHandler.js';
@@ -15,6 +16,12 @@ dotenv.config({ path: './config.env' });
 if (process.env.NODE_ENV == 'development') {
     server.use(morgan('dev'));
 }
+const limiter = rateLimit({
+    max: 100,
+    windowMs: 60 * 60 * 1000,
+    message: 'too many requests from this IP, please try again in an hour',
+});
+server.use('/api', limiter);
 server.use(cors());
 server.use(bodyParser.json());
 
