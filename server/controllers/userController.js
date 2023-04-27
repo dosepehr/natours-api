@@ -3,6 +3,14 @@ import ErrorHandler from '../utils/errorHandler.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import { filterObj } from '../utils/filterObj.js';
 
+export const getUsers = catchAsync(async (req, res, next) => {
+    const result = await User.find();
+    res.status(200).json({
+        status: 'success',
+        result,
+    });
+});
+
 export const updateMe = catchAsync(async (req, res, next) => {
     // 1) Create error if user POSTs password data
     if (req.body.password || req.body.passwordConfirm) {
