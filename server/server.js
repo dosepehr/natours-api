@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import tourRoute from './routes/TourRoute.js';
 import userRoute from './routes/userRoute.js';
@@ -12,6 +13,7 @@ import { errorController } from './controllers/errorController.js';
 
 const server = express();
 // * middlewares
+server.use(helmet());
 dotenv.config({ path: './config.env' });
 if (process.env.NODE_ENV == 'development') {
     server.use(morgan('dev'));
@@ -23,7 +25,7 @@ const limiter = rateLimit({
 });
 server.use('/api', limiter);
 server.use(cors());
-server.use(bodyParser.json());
+server.use(bodyParser.json({ limit: '10kb' }));
 
 // * connection
 mongoose.connect(process.env.MONGO_URL).then(() => {
