@@ -13,18 +13,23 @@ import { errorController } from './controllers/errorController.js';
 
 const server = express();
 // * middlewares
-server.use(helmet());
-dotenv.config({ path: './config.env' });
-if (process.env.NODE_ENV == 'development') {
-    server.use(morgan('dev'));
-}
+// ! security
+// ! limiting requests
 const limiter = rateLimit({
     max: 100,
     windowMs: 60 * 60 * 1000,
     message: 'too many requests from this IP, please try again in an hour',
 });
+server.use(helmet());
 server.use('/api', limiter);
+
+dotenv.config({ path: './config.env' });
+if (process.env.NODE_ENV == 'development') {
+    server.use(morgan('dev'));
+}
+
 server.use(cors());
+// ! body-parser for getting date from req.body
 server.use(bodyParser.json({ limit: '10kb' }));
 
 // * connection
