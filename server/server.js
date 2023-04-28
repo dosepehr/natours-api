@@ -9,9 +9,11 @@ import hpp from 'hpp';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit';
+
 import tourRoute from './routes/TourRoute.js';
 import userRoute from './routes/userRoute.js';
 import ErrorHandler from './utils/errorHandler.js';
+import reviewRoute from './routes/reviewRoute.js';
 import { errorController } from './controllers/errorController.js';
 
 dotenv.config({ path: './config.env' });
@@ -62,6 +64,7 @@ mongoose.Promise = global.Promise;
 // * routes
 server.use('/api/v1/tours', tourRoute);
 server.use('/api/v1/users', userRoute);
+server.use('/api/v1/reviews', reviewRoute);
 
 // * a route for undefined routes
 server.all('*', (req, res, next) => {
