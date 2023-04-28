@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import validator from 'validator';
+// import validator from 'validator';
+import User from './UserModel.js';
 const TourSchema = mongoose.Schema({
     name: {
         type: String,
@@ -98,6 +99,15 @@ const TourSchema = mongoose.Schema({
     ],
     guides: Array,
 });
+// ! modelling tour guides embedding
+TourSchema.pre('save', async function (next) {
+    const guidesPromises = this.guides.map(
+        async (id) => await User.findById(id)
+    );
+    this.guides = await Promise.all(guidesPromises);
+    next();
+});
+
 let Tour = mongoose.model('Tours', TourSchema);
 
 export default Tour;
