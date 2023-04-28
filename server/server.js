@@ -14,6 +14,8 @@ import userRoute from './routes/userRoute.js';
 import ErrorHandler from './utils/errorHandler.js';
 import { errorController } from './controllers/errorController.js';
 
+dotenv.config({ path: './config.env' });
+
 const server = express();
 // * middlewares
 // ! security
@@ -26,7 +28,6 @@ const limiter = rateLimit({
 server.use(helmet());
 server.use('/api', limiter);
 
-dotenv.config({ path: './config.env' });
 if (process.env.NODE_ENV == 'development') {
     server.use(morgan('dev'));
 }
