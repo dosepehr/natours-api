@@ -13,7 +13,7 @@ import rateLimit from 'express-rate-limit';
 import tourRoute from './routes/TourRoute.js';
 import userRoute from './routes/userRoute.js';
 import ErrorHandler from './utils/errorHandler.js';
-import reviewRoute from './routes/reviewRoute.js';
+import reviewRoute from './routes/ReviewRoute.js';
 import { errorController } from './controllers/errorController.js';
 
 dotenv.config({ path: './config.env' });

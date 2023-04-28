@@ -109,15 +109,13 @@ UserSchema.methods.createPasswordResetToken = function () {
         .createHash('sha256')
         .update(resetToken)
         .digest('hex');
-
-    console.log({ resetToken }, this.passwordResetToken);
-
+    
     // ! number 10 is active time of the token
     this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
     return resetToken;
 };
 
-let User = mongoose.model('Users', UserSchema);
+let User = mongoose.model('User', UserSchema);
 
 export default User;

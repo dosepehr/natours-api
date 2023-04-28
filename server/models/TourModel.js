@@ -101,7 +101,7 @@ const TourSchema = mongoose.Schema(
         guides: [
             {
                 type: mongoose.Schema.ObjectId,
-                ref: 'Users', //name in the db
+                ref: 'User',
             },
         ],
     },
@@ -119,7 +119,6 @@ TourSchema.pre(/^find/, function (next) {
 
     next();
 });
-
 // ! modelling tour guides embedding
 // TourSchema.pre('save', async function (next) {
 //     const guidesPromises = this.guides.map(
@@ -129,6 +128,6 @@ TourSchema.pre(/^find/, function (next) {
 //     next();
 // });
 
-let Tour = mongoose.model('Tours', TourSchema);
+let Tour = mongoose.model('Tour', TourSchema);
 
 export default Tour;
