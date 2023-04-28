@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 // import validator from 'validator';
-import User from './UserModel.js';
 const TourSchema = mongoose.Schema({
     name: {
         type: String,
@@ -97,16 +96,32 @@ const TourSchema = mongoose.Schema({
             day: Number,
         },
     ],
-    guides: Array,
+    // guides: Array, this was for embedding
+    guides: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Users', //name in the db
+        },
+    ],
 });
-// ! modelling tour guides embedding
-TourSchema.pre('save', async function (next) {
-    const guidesPromises = this.guides.map(
-        async (id) => await User.findById(id)
-    );
-    this.guides = await Promise.all(guidesPromises);
+
+TourSchema.pre(/^find/, function (next) {
+    this.populate({
+        path: 'guides',
+        select: '-__v -passwordChangedAt',
+    });
+
     next();
 });
+
+// ! modelling tour guides embedding
+// TourSchema.pre('save', async function (next) {
+//     const guidesPromises = this.guides.map(
+//         async (id) => await User.findById(id)
+//     );
+//     this.guides = await Promise.all(guidesPromises);
+//     next();
+// });
 
 let Tour = mongoose.model('Tours', TourSchema);
 
