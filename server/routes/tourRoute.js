@@ -11,8 +11,11 @@ import {
 } from '../controllers/tourController.js';
 
 import { protect, restrictTo } from '../controllers/authController.js';
-import { createReview } from '../controllers/reviewController.js';
+import reviewRoute from './reviewRoute.js';
 const tourRoute = express.Router();
+
+// ! nesting these two routes
+tourRoute.use('/:tourId/reviews',reviewRoute)
 
 // * Route --> http://localhost:5000/api/v1/tours
 tourRoute.route('/').get(protect, getTours).post(createTour);
@@ -35,8 +38,9 @@ tourRoute.route('/stats').get(getTourStats);
 // * Route --> http://localhost:5000/api/v1/tours/monthly-plan/:year
 tourRoute.route('/monthly-plan/:year').get(getMonthlyPlan);
 
-tourRoute
-    .route('/:tourId/review')
-    .post(protect, restrictTo('user'), createReview);
+// * nested route for reviews and tours
+// tourRoute
+//     .route('/:tourId/review')
+//     .post(protect, restrictTo('user'), createReview);
 
 export default tourRoute;
