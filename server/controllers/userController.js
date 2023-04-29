@@ -2,6 +2,7 @@ import User from '../models/UserModel.js';
 import ErrorHandler from '../utils/errorHandler.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import { filterObj } from '../utils/filterObj.js';
+import { deleteOne } from './handlerFactory.js';
 
 export const getUsers = catchAsync(async (req, res, next) => {
     const result = await User.find();
@@ -49,3 +50,5 @@ export const deleteMe = catchAsync(async (req, res, next) => {
         status: 'success',
     });
 });
+
+export const deleteUser = deleteOne(User);
