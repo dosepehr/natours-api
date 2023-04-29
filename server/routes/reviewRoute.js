@@ -3,6 +3,7 @@ import express from 'express';
 import {
     createReview,
     getAllReviews,
+    deleteReview,
 } from '../controllers/reviewController.js';
 import { protect, restrictTo } from '../controllers/authController.js';
 
@@ -14,5 +15,7 @@ reviewRoute
     .route('/')
     .get(getAllReviews)
     .post(protect, restrictTo('user'), createReview);
+
+reviewRoute.route('/:id').delete(protect,restrictTo('admin'),deleteReview);
 
 export default reviewRoute;
