@@ -1,11 +1,14 @@
 import Review from '../models/ReviewModel.js';
-import ErrorHandler from '../utils/errorHandler.js';
 import { catchAsync } from '../utils/catchAsync.js';
 
 export const getAllReviews = catchAsync(async (req, res, next) => {
-    const data = await Review.find();
+    let filter = {};
+    if (req.params.tourId) filter = { tour: req.params.tourId };
+
+    const data = await Review.find(filter);
     res.status(200).json({
         status: 'success',
+        length: data.length,
         data,
     });
 });
