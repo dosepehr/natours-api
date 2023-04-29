@@ -2,6 +2,8 @@ import Tour from '../models/TourModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
 import ErrorHandler from '../utils/errorHandler.js';
 import { catchAsync } from '../utils/catchAsync.js';
+import { deleteOne } from './handlerFactory.js';
+
 // * alias for top tours
 
 export const topToursAlias = (req, res, next) => {
@@ -26,7 +28,7 @@ export const getTours = catchAsync(async (req, res, next) => {
 
 // * getting one user
 export const getTour = catchAsync(async (req, res, next) => {
-    const result = await Tour.findById(req.params.id).populate('reviews')
+    const result = await Tour.findById(req.params.id).populate('reviews');
 
     if (!result) {
         return next(new ErrorHandler('no', 404));
@@ -55,14 +57,7 @@ export const updateTour = catchAsync(async (req, res, next) => {
     res.status(200).send(result);
 });
 // * deleting tour
-
-export const deleteTour = catchAsync(async (req, res, next) => {
-    const result = await Tour.findByIdAndDelete(req.params.id);
-    if (!result) {
-        return next(new ErrorHandler('no tour dound with this Id ', 404));
-    }
-    res.status(200).send(result);
-});
+export const deleteTour = deleteOne(Tour);
 
 export const getTourStats = catchAsync(async (req, res, next) => {
     const stats = await Tour.aggregate([
