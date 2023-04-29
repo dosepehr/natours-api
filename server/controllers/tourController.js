@@ -26,7 +26,7 @@ export const getTours = catchAsync(async (req, res, next) => {
 
 // * getting one user
 export const getTour = catchAsync(async (req, res, next) => {
-    const result = await Tour.findById(req.params.id);
+    const result = await Tour.findById(req.params.id).populate('reviews')
 
     if (!result) {
         return next(new ErrorHandler('no', 404));

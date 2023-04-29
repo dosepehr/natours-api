@@ -119,6 +119,20 @@ TourSchema.pre(/^find/, function (next) {
 
     next();
 });
+
+// virtual populate
+TourSchema.virtual('reviews', {
+    ref: 'Review',
+    foreignField: 'tour',
+    localField: '_id',
+});
+
+// ? what is the diffrence between guide and review population? why we did virtual population on reviews?
+// * we populate guides in TourModel,so we access guides in get tour
+// * we populate reviews in ReviesModel,so we access guides in get review
+// * but to get access to reviews in get tour,we need to use virtual population
+
+
 // ! modelling tour guides embedding
 // TourSchema.pre('save', async function (next) {
 //     const guidesPromises = this.guides.map(
