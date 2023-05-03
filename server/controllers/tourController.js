@@ -2,7 +2,7 @@ import Tour from '../models/TourModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
 import ErrorHandler from '../utils/errorHandler.js';
 import { catchAsync } from '../utils/catchAsync.js';
-import { deleteOne, updateOne } from './handlerFactory.js';
+import { deleteOne, updateOne,createOne } from './handlerFactory.js';
 
 // * alias for top tours
 
@@ -37,17 +37,8 @@ export const getTour = catchAsync(async (req, res, next) => {
     res.status(200).send(result);
 });
 
-// * creating a new tour
-export const createTour = catchAsync(async (req, res, next) => {
-    const result = await Tour.create(req.body);
-
-    res.status(201).send(result);
-});
-
-// * updating tour
+export const createTour = createOne(Tour);
 export const updateTour = updateOne(Tour);
-
-// * deleting tour
 export const deleteTour = deleteOne(Tour);
 
 export const getTourStats = catchAsync(async (req, res, next) => {
