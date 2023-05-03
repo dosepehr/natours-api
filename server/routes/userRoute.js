@@ -14,6 +14,7 @@ import {
     updateMe,
     deleteUser,
     updateUser,
+    getUser,
 } from '../controllers/userController.js';
 
 const userRoute = express.Router();
@@ -32,6 +33,7 @@ userRoute.route('/').get(protect, restrictTo('admin', 'lead-guide'), getUsers);
 userRoute
     .route('/:id')
     .delete(protect, restrictTo('admin'), deleteUser)
-    .patch(updateUser);
+    .patch(updateUser)
+    .get(getUser);
 
 export default userRoute;
