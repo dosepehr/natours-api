@@ -2,7 +2,7 @@ import Tour from '../models/TourModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
 import ErrorHandler from '../utils/errorHandler.js';
 import { catchAsync } from '../utils/catchAsync.js';
-import { deleteOne } from './handlerFactory.js';
+import { deleteOne, updateOne } from './handlerFactory.js';
 
 // * alias for top tours
 
@@ -45,17 +45,8 @@ export const createTour = catchAsync(async (req, res, next) => {
 });
 
 // * updating tour
+export const updateTour = updateOne(Tour);
 
-export const updateTour = catchAsync(async (req, res, next) => {
-    const result = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-    });
-    if (!result) {
-        return next(new ErrorHandler('no tour dound with this Id ', 404));
-    }
-    res.status(200).send(result);
-});
 // * deleting tour
 export const deleteTour = deleteOne(Tour);
 
