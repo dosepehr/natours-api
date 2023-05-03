@@ -20,6 +20,17 @@ export const setTourUserIds = (req, res, next) => {
     next();
 };
 
+export const checkUser = async (req, res, next) => {
+    const review = await Review.findById(req.params.id);
+    if (review.user.id === req.user.id) {
+        next();
+    } else {
+        res.status(403).json({
+            message: "you can't edit this review",
+        });
+    }
+};
+
 export const createReview = createOne(Review);
 export const updateReview = updateOne(Review);
 export const deleteReview = deleteOne(Review);
