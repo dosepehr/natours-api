@@ -8,7 +8,13 @@ import {
     protect,
     restrictTo,
 } from '../controllers/authController.js';
-import { deleteMe, getUsers, updateMe,deleteUser } from '../controllers/userController.js';
+import {
+    deleteMe,
+    getUsers,
+    updateMe,
+    deleteUser,
+    updateUser,
+} from '../controllers/userController.js';
 
 const userRoute = express.Router();
 
@@ -23,6 +29,9 @@ userRoute.route('/updateMe').patch(protect, updateMe);
 userRoute.route('/deleteMe').patch(protect, deleteMe);
 
 userRoute.route('/').get(protect, restrictTo('admin', 'lead-guide'), getUsers);
-userRoute.route('/:id').delete(protect, restrictTo('admin'), deleteUser);
+userRoute
+    .route('/:id')
+    .delete(protect, restrictTo('admin'), deleteUser)
+    .patch(updateUser);
 
 export default userRoute;
