@@ -2,15 +2,8 @@ import User from '../models/UserModel.js';
 import ErrorHandler from '../utils/errorHandler.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import { filterObj } from '../utils/filterObj.js';
-import { deleteOne, getOne, updateOne } from './handlerFactory.js';
+import { deleteOne, getOne, updateOne, getAll } from './handlerFactory.js';
 
-export const getUsers = catchAsync(async (req, res, next) => {
-    const result = await User.find();
-    res.status(200).json({
-        status: 'success',
-        result,
-    });
-});
 
 export const updateMe = catchAsync(async (req, res, next) => {
     // 1) Create error if user POSTs password data
@@ -51,6 +44,7 @@ export const deleteMe = catchAsync(async (req, res, next) => {
     });
 });
 
+export const getUsers = getAll(User);
 // Do NOT update password with this!
 export const updateUser = updateOne(User);
 export const getUser = getOne(User);

@@ -8,17 +8,7 @@ import {
     getAll,
 } from './handlerFactory.js';
 
-export const getAllReviews = catchAsync(async (req, res, next) => {
-    let filter = {};
-    if (req.params.tourId) filter = { tour: req.params.tourId };
-
-    const data = await Review.find(filter);
-    res.status(200).json({
-        status: 'success',
-        length: data.length,
-        data,
-    });
-});
+export const getAllReviews = getAll(Review)
 
 export const setTourUserIds = (req, res, next) => {
     if (!req.body.tour) req.body.tour = req.params.tourId;

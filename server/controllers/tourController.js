@@ -19,21 +19,21 @@ export const topToursAlias = (req, res, next) => {
 };
 
 // * getting all tours
-export const getTours = catchAsync(async (req, res, next) => {
-    const features = new APIFeatures(Tour.find(), req.query)
-        .filter()
-        .sort()
-        .limit()
-        .paginate();
+// export const getTours = catchAsync(async (req, res, next) => {
+//     const features = new APIFeatures(Tour.find(), req.query)
+//         .filter()
+//         .sort()
+//         .limit()
+//         .paginate();
 
-    const result = await features.query;
+//     const result = await features.query;
 
-    res.status(200).send({ length: result.length, result });
-});
+//     res.status(200).send({ length: result.length, result });
+// });
 
 // * getting one user
+export const getTours = getAll(Tour);
 export const getTour = getOne(Tour, { path: 'reviews' });
-
 export const createTour = createOne(Tour);
 export const updateTour = updateOne(Tour);
 export const deleteTour = deleteOne(Tour);
