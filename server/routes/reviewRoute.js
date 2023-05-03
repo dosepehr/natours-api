@@ -4,6 +4,7 @@ import {
     createReview,
     getAllReviews,
     deleteReview,
+    updateReview,
 } from '../controllers/reviewController.js';
 import { protect, restrictTo } from '../controllers/authController.js';
 
@@ -16,6 +17,9 @@ reviewRoute
     .get(getAllReviews)
     .post(protect, restrictTo('user'), createReview);
 
-reviewRoute.route('/:id').delete(protect,restrictTo('admin'),deleteReview);
+reviewRoute
+    .route('/:id')
+    .delete(protect, restrictTo('admin'), deleteReview)
+    .patch(updateReview);
 
 export default reviewRoute;
