@@ -110,7 +110,7 @@ const TourSchema = mongoose.Schema(
         toObject: { virtuals: true },
     }
 );
-
+TourSchema.index({ price: 1 });
 TourSchema.pre(/^find/, function (next) {
     this.populate({
         path: 'guides',
@@ -131,7 +131,6 @@ TourSchema.virtual('reviews', {
 // * we populate guides in TourModel,so we access guides in get tour
 // * we populate reviews in ReviesModel,so we access guides in get review
 // * but to get access to reviews in get tour,we need to use virtual population
-
 
 // ! modelling tour guides embedding
 // TourSchema.pre('save', async function (next) {
