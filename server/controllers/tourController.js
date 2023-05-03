@@ -1,8 +1,13 @@
 import Tour from '../models/TourModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
-import ErrorHandler from '../utils/errorHandler.js';
 import { catchAsync } from '../utils/catchAsync.js';
-import { deleteOne, updateOne,createOne } from './handlerFactory.js';
+import {
+    deleteOne,
+    updateOne,
+    createOne,
+    getOne,
+    getAll,
+} from './handlerFactory.js';
 
 // * alias for top tours
 
@@ -27,15 +32,7 @@ export const getTours = catchAsync(async (req, res, next) => {
 });
 
 // * getting one user
-export const getTour = catchAsync(async (req, res, next) => {
-    const result = await Tour.findById(req.params.id).populate('reviews');
-
-    if (!result) {
-        return next(new ErrorHandler('no', 404));
-    }
-
-    res.status(200).send(result);
-});
+export const getTour = getOne(Tour, { path: 'reviews' });
 
 export const createTour = createOne(Tour);
 export const updateTour = updateOne(Tour);
