@@ -15,19 +15,22 @@ import reviewRoute from './reviewRoute.js';
 const tourRoute = express.Router();
 
 // ! nesting these two routes
-tourRoute.use('/:tourId/reviews',reviewRoute)
+tourRoute.use('/:tourId/reviews', reviewRoute);
 
 // * Route --> http://localhost:5000/api/v1/tours
-tourRoute.route('/').get(protect, getTours).post(createTour);
+tourRoute
+    .route('/')
+    .get(getTours)
+    .post(protect, restrictTo('admin', 'lead-guide'), createTour);
 
 // * Route --> http://localhost:5000/api/v1/tours
 tourRoute
     .route('/:id')
-    .patch(updateTour)
+    .patch(protect, restrictTo('admin', 'lead-guide'), updateTour)
     .delete(protect, restrictTo('admin', 'lead-guide'), deleteTour);
 
 // * Route --> http://localhost:5000/api/v1/tours/main
-tourRoute.route('/main/:id').get(getTour);
+tourRoute.route('/:id').get(getTour);
 
 //  * Route --> http://localhost:5000/api/v1/tours/top-tours
 tourRoute.route('/top-tours').get(topToursAlias, getTours);
@@ -36,11 +39,8 @@ tourRoute.route('/top-tours').get(topToursAlias, getTours);
 tourRoute.route('/stats').get(getTourStats);
 
 // * Route --> http://localhost:5000/api/v1/tours/monthly-plan/:year
-tourRoute.route('/monthly-plan/:year').get(getMonthlyPlan);
-
-// * nested route for reviews and tours
-// tourRoute
-//     .route('/:tourId/review')
-//     .post(protect, restrictTo('user'), createReview);
+tourRoute
+    .route('/monthly-plan/:year')
+    .get(protect, restrictTo('admin', 'lead-guide', 'guide'), getMonthlyPlan);
 
 export default tourRoute;
