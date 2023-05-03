@@ -15,6 +15,7 @@ import {
     deleteUser,
     updateUser,
     getUser,
+    getMe,
 } from '../controllers/userController.js';
 
 const userRoute = express.Router();
@@ -28,7 +29,7 @@ userRoute.route('/updatePassword').patch(protect, updatePassword);
 
 userRoute.route('/updateMe').patch(protect, updateMe);
 userRoute.route('/deleteMe').patch(protect, deleteMe);
-
+userRoute.get('/me', protect, getMe, getUser);
 userRoute.route('/').get(protect, restrictTo('admin', 'lead-guide'), getUsers);
 userRoute
     .route('/:id')

@@ -4,7 +4,6 @@ import { catchAsync } from '../utils/catchAsync.js';
 import { filterObj } from '../utils/filterObj.js';
 import { deleteOne, getOne, updateOne, getAll } from './handlerFactory.js';
 
-
 export const updateMe = catchAsync(async (req, res, next) => {
     // 1) Create error if user POSTs password data
     if (req.body.password || req.body.passwordConfirm) {
@@ -43,6 +42,11 @@ export const deleteMe = catchAsync(async (req, res, next) => {
         status: 'success',
     });
 });
+
+export const getMe = (req, res, next) => {
+    req.params.id = req.user.id;
+    next()
+};
 
 export const getUsers = getAll(User);
 // Do NOT update password with this!
