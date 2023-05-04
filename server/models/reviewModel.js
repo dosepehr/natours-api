@@ -31,6 +31,7 @@ const ReviewSchema = mongoose.Schema(
         toObject: { virtuals: true },
     }
 );
+// each user , one review on tour
 ReviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 ReviewSchema.pre(/^find/, function (next) {
     //* we comment this code to prevent chaining in our app
@@ -63,8 +64,6 @@ ReviewSchema.statics.calcAverageRatings = async function (tourId) {
             },
         },
     ]);
-    // console.log(stats);
-
     if (stats.length > 0) {
         await Tour.findByIdAndUpdate(tourId, {
             ratingsQuantity: stats[0].nRating,
