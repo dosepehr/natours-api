@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 // import validator from 'validator';
+import slugify from 'slugify';
 const TourSchema = mongoose.Schema(
     {
         name: {
@@ -12,6 +13,7 @@ const TourSchema = mongoose.Schema(
             // ! validator library
             // validate: [validator.isAlpha, 'not alpha'],
         },
+        slug: String,
         duration: {
             type: Number,
             required: true,
@@ -112,6 +114,11 @@ const TourSchema = mongoose.Schema(
     }
 );
 TourSchema.index({ price: 1 });
+
+TourSchema.pre('save', function (next) {
+    this.slug = slugify(this.name, { lower: true });
+    next();
+});
 TourSchema.pre(/^find/, function (next) {
     this.populate({
         path: 'guides',
