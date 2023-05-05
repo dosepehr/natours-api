@@ -1,4 +1,6 @@
 import express from 'express';
+import * as url from 'url';
+import path from 'path';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
@@ -15,10 +17,13 @@ import ErrorHandler from './utils/errorHandler.js';
 import reviewRoute from './routes/ReviewRoute.js';
 import { errorController } from './controllers/errorController.js';
 dotenv.config({ path: './config.env' });
-
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const server = express();
 server.set('view engine', 'pug');
-server.set('views', './views');
+server.set('views', path.join(__dirname, 'views'));
+// Serving static files
+server.use(express.static(path.join(__dirname, 'public')));
+
 // security
 // limiting requests
 const limiter = rateLimit({
