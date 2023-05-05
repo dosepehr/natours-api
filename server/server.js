@@ -73,6 +73,17 @@ server.use('/api/v1/reviews', reviewRoute);
 server.get('/', (req, res) => {
     res.status(200).render('base');
 });
+server.get('/overview', (req, res) => {
+    res.status(200).render('overview', {
+        title:'All tours'
+    });
+});
+server.get('/tour', (req, res) => {
+    res.status(200).render('tour', {
+        title:'the forest'
+    });
+});
+
 // a route for undefined routes
 server.all('*', (req, res, next) => {
     next(new ErrorHandler(`can't fint ${req.originalUrl} on this server`, 404));
