@@ -15,6 +15,8 @@ import tourRoute from './routes/TourRoute.js';
 import userRoute from './routes/userRoute.js';
 import ErrorHandler from './utils/errorHandler.js';
 import reviewRoute from './routes/ReviewRoute.js';
+import viewRoute from './routes/viewRoute.js';
+
 import { errorController } from './controllers/errorController.js';
 dotenv.config({ path: './config.env' });
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -69,20 +71,8 @@ mongoose.Promise = global.Promise;
 server.use('/api/v1/tours', tourRoute);
 server.use('/api/v1/users', userRoute);
 server.use('/api/v1/reviews', reviewRoute);
+server.use('/', viewRoute);
 
-server.get('/', (req, res) => {
-    res.status(200).render('base');
-});
-server.get('/overview', (req, res) => {
-    res.status(200).render('overview', {
-        title:'All tours'
-    });
-});
-server.get('/tour', (req, res) => {
-    res.status(200).render('tour', {
-        title:'the forest'
-    });
-});
 
 // a route for undefined routes
 server.all('*', (req, res, next) => {
