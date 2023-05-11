@@ -19,6 +19,8 @@ import {
     getMe,
 } from '../controllers/userController.js';
 
+import { uploadUserPhoto } from '../utils/uploadImage.js';
+
 const userRoute = express.Router();
 
 userRoute.route('/signup').post(signup);
@@ -27,15 +29,14 @@ userRoute.route('/logout').get(logout);
 userRoute.route('/forgotPassword').post(forgotPassword);
 userRoute.route('/resetPassword/:token').patch(resetPassword);
 
-
 userRoute.use(protect);
 userRoute.route('/updatePassword').patch(updatePassword);
 
-userRoute.route('/updateMe').patch(updateMe);
+userRoute.route('/updateMe').patch(uploadUserPhoto, updateMe);
 userRoute.route('/deleteMe').patch(deleteMe);
 userRoute.get('/me', getMe, getUser);
 
-userRoute.use(restrictTo('admin'))
+userRoute.use(restrictTo('admin'));
 
 userRoute.route('/').get(restrictTo('admin', 'lead-guide'), getUsers);
 userRoute
