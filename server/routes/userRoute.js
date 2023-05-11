@@ -7,7 +7,7 @@ import {
     updatePassword,
     protect,
     restrictTo,
-    logout
+    logout,
 } from '../controllers/authController.js';
 import {
     deleteMe,
@@ -19,7 +19,7 @@ import {
     getMe,
 } from '../controllers/userController.js';
 
-import { uploadUserPhoto } from '../utils/uploadImage.js';
+import { uploadUserPhoto, resizeUserPhoto } from '../utils/uploadImage.js';
 
 const userRoute = express.Router();
 
@@ -32,7 +32,7 @@ userRoute.route('/resetPassword/:token').patch(resetPassword);
 userRoute.use(protect);
 userRoute.route('/updatePassword').patch(updatePassword);
 
-userRoute.route('/updateMe').patch(uploadUserPhoto, updateMe);
+userRoute.route('/updateMe').patch(uploadUserPhoto, resizeUserPhoto, updateMe);
 userRoute.route('/deleteMe').patch(deleteMe);
 userRoute.get('/me', getMe, getUser);
 
