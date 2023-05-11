@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser'
 import helmet from 'helmet';
 import hpp from 'hpp';
 import mongoSanitize from 'express-mongo-sanitize';
@@ -41,8 +42,8 @@ if (process.env.NODE_ENV == 'development') {
 }
 
 server.use(cors());
-// body-parser for getting date from req.body
 server.use(bodyParser.json({ limit: '10kb' }));
+server.use(cookieParser())
 
 // data sanitization against NoSQL query injection
 server.use(mongoSanitize());
