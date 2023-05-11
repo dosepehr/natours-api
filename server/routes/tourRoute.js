@@ -12,6 +12,7 @@ import {
 
 import { protect, restrictTo } from '../controllers/authController.js';
 import reviewRoute from './reviewRoute.js';
+import { resizeTourImages, uploadTourPhotos } from '../utils/uploadImage.js';
 const tourRoute = express.Router();
 
 // ! nesting these two routes
@@ -26,7 +27,13 @@ tourRoute
 // * Route --> http://localhost:5000/api/v1/tours
 tourRoute
     .route('/:id')
-    .patch(protect, restrictTo('admin', 'lead-guide'), updateTour)
+    .patch(
+        protect,
+        restrictTo('admin', 'lead-guide'),
+        uploadTourPhotos,
+        resizeTourImages,
+        updateTour
+    )
     .delete(protect, restrictTo('admin', 'lead-guide'), deleteTour);
 
 // * Route --> http://localhost:5000/api/v1/tours/main
