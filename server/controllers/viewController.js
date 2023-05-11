@@ -9,8 +9,14 @@ export const overview = catchAsync(async (req, res, next) => {
         tours,
     });
 });
-export const tour = (req, res) => {
+export const tour = catchAsync(async (req, res) => {
+    const tour = await Tour.findOne({ slug: req.params.slug }).populate({
+        path: 'reviews',
+        fields: 'content rating user',
+    });
+
     res.status(200).render('tour', {
         title: 'All tours',
+        tour
     });
-};
+});

@@ -3,6 +3,6 @@ import { overview, tour } from '../controllers/viewController.js';
 const viewRoute = express.Router();
 
 viewRoute.get('/', overview);
-viewRoute.get('/tour', tour);
+viewRoute.get('/tour/:slug', tour);
 
 export default viewRoute;
