@@ -7,6 +7,7 @@ import {
     updatePassword,
     protect,
     restrictTo,
+    logout
 } from '../controllers/authController.js';
 import {
     deleteMe,
@@ -22,6 +23,7 @@ const userRoute = express.Router();
 
 userRoute.route('/signup').post(signup);
 userRoute.route('/login').post(login);
+userRoute.route('/logout').get(logout);
 userRoute.route('/forgotPassword').post(forgotPassword);
 userRoute.route('/resetPassword/:token').patch(resetPassword);
 
