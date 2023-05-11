@@ -17,7 +17,8 @@ export const updateMe = catchAsync(async (req, res, next) => {
 
     // 2) Filtered out unwanted fields names that are not allowed to be updated
     const filteredBody = filterObj(req.body, 'name', 'email');
-
+    if (req.file) filteredBody.photo = req.file.filename;
+    
     // 3) Update user document
     const updatedUser = await User.findByIdAndUpdate(
         req.user.id,
@@ -45,7 +46,7 @@ export const deleteMe = catchAsync(async (req, res, next) => {
 
 export const getMe = (req, res, next) => {
     req.params.id = req.user.id;
-    next()
+    next();
 };
 
 export const getUsers = getAll(User);

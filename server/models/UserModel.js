@@ -19,6 +19,7 @@ const UserSchema = mongoose.Schema({
     },
     photo: {
         type: String,
+        default: 'default.png',
     },
     role: {
         type: String,
@@ -109,7 +110,7 @@ UserSchema.methods.createPasswordResetToken = function () {
         .createHash('sha256')
         .update(resetToken)
         .digest('hex');
-    
+
     // ! number 10 is active time of the token
     this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
