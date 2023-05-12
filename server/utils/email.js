@@ -13,9 +13,18 @@ export default class Email {
     }
     newTransport() {
         if (process.env.NODE_ENV == 'production') {
+            return nodemailer.createTransport({
+                host: process.env.EMAIL_HOST_LIARA,
+                port: process.env.EMAIL_PORT,
+                tls: true,
+                auth: {
+                    user: process.env.EMAIL_USERNAME,
+                    pass: process.env.EMAIL_PASSWORD,
+                },
+            });
         }
         return nodemailer.createTransport({
-            host: process.env.EMAIL_HOST,
+            host: process.env.EMAIL_HOST_MAILTRAP,
             port: process.env.EMAIL_PORT,
             auth: {
                 user: process.env.EMAIL_USERNAME,
@@ -50,6 +59,9 @@ export default class Email {
         await this.send('welcome', 'Welcome to the Natours Family!');
     }
     async sendPasswordReset() {
-        await this.send('passwordReset','Your password reset token (valid for 10 minutes)')
+        await this.send(
+            'passwordReset',
+            'Your password reset token (valid for 10 minutes)'
+        );
     }
 }
