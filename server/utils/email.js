@@ -1,27 +1,53 @@
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import pug from 'pug';
+import url from 'url';
 dotenv.config({ path: './config.env' });
 
-export const sendEmail = async (options) => {
-    // 1) Create a transporter
-    const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_PORT,
-        auth: {
-            user: process.env.EMAIL_USERNAME,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
+export default class Email {
+    constructor(user, url) {
+        this.to = user.email;
+        this.firstName = user.name.split(' ')[0];
+        this.url = url;
+        this.from = `sepehr do ${process.env.EMAIL_FROM}`;
+    }
+    newTransport() {
+        if (process.env.NODE_ENV == 'production') {
+        }
+        return nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: process.env.EMAIL_PORT,
+            auth: {
+                user: process.env.EMAIL_USERNAME,
+                pass: process.env.EMAIL_PASSWORD,
+            },
+        });
+    }
+    async send(template, subject) {
+        const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+        // render html
+        const html = pug.renderFile(
+            `${__dirname}/../views/email/${template}.pug`,
+            {
+                firstName: this.firstName,
+                url: this.url,
+                subject,
+            }
+        );
 
-    // 2) Define the email options
-    const mailOptions = {
-        from: 'Jonas Schmedtmann <hello@jonas.io>',
-        to: options.email,
-        subject: options.subject,
-        text: options.message,
-        // html: '<p style="background: red;">hello there</p>',
-    };
+        // define the email options
+        const mailOptions = {
+            from: this.from,
+            to: this.to,
+            subject,
+            // text: options.message,
+            html,
+        };
+        // create a transport and send email
+        await this.newTransport().sendMail(mailOptions);
+    }
+    async sendWelcome() {
+        await this.send('welcome', 'Welcome to the Natours Family!');
+    }
 
-    // 3) Actually send the email
-    await transporter.sendMail(mailOptions);
-};
+}
