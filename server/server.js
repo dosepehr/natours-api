@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser'
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import mongoSanitize from 'express-mongo-sanitize';
@@ -15,7 +15,8 @@ import rateLimit from 'express-rate-limit';
 import tourRoute from './routes/TourRoute.js';
 import userRoute from './routes/userRoute.js';
 import ErrorHandler from './utils/errorHandler.js';
-import reviewRoute from './routes/ReviewRoute.js';
+import reviewRoute from './routes/reviewRoute.js';
+import bookingRoute from './routes/bookingRoute.js';
 import viewRoute from './routes/viewRoute.js';
 
 import { errorController } from './controllers/errorController.js';
@@ -43,7 +44,7 @@ if (process.env.NODE_ENV == 'development') {
 
 server.use(cors());
 server.use(bodyParser.json({ limit: '10kb' }));
-server.use(cookieParser())
+server.use(cookieParser());
 
 // data sanitization against NoSQL query injection
 server.use(mongoSanitize());
@@ -72,8 +73,8 @@ mongoose.Promise = global.Promise;
 server.use('/api/v1/tours', tourRoute);
 server.use('/api/v1/users', userRoute);
 server.use('/api/v1/reviews', reviewRoute);
+server.use('/api/v1/booking', bookingRoute);
 server.use('/', viewRoute);
-
 
 // a route for undefined routes
 server.all('*', (req, res, next) => {
