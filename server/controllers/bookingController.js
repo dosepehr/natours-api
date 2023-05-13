@@ -1,6 +1,6 @@
 import Tour from '../models/TourModel.js';
 import { catchAsync } from '../utils/catchAsync.js';
-import { createOne, getAll } from './handlerFactory.js';
+import { createOne, getAll, getOne } from './handlerFactory.js';
 import ErrorHandler from '../utils/errorHandler.js';
 import Booking from '../models/BookingModel.js';
 
@@ -27,3 +27,5 @@ export const myTours = catchAsync(async (req, res, next) => {
 });
 
 export const createBooking = createOne(Booking);
+export const getBooking = getOne(Booking);
+export const getAllBookings = getAll(Booking);
