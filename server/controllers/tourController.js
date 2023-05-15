@@ -1,5 +1,4 @@
 import Tour from '../models/TourModel.js';
-import APIFeatures from '../utils/apiFeatures.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import {
     deleteOne,
@@ -18,26 +17,17 @@ export const topToursAlias = (req, res, next) => {
     next();
 };
 
-export const getTours = getAll(Tour);
-export const getTour = getOne(Tour, { path: 'reviews' });
-export const createTour = createOne(Tour);
-export const updateTour = updateOne(Tour);
-export const deleteTour = deleteOne(Tour);
-
 export const getTourStats = catchAsync(async (req, res, next) => {
     const stats = await Tour.aggregate([
         {
             $match: {
-                //! select documents that match this condition
                 ratingsAverage: {
                     $gte: 4.5,
                 },
             },
         },
         {
-            // !group data
             $group: {
-                // ! group by what
                 _id: null,
                 // _id: '$difficulty',
                 numTours: { $sum: 1 },
@@ -48,14 +38,14 @@ export const getTourStats = catchAsync(async (req, res, next) => {
                 maxPrice: { $max: '$price' },
             },
         },
-        {
-            $sort: { avgPrice: 1 },
-        },
+        // {
+        //     $sort: { avgPrice: -1 },
+        // },
         // {
         //     $match: { _id:{$ne:"easy"}}
         // }
     ]);
-    res.status(201).send(stats);
+    res.status(201).json(stats);
 });
 
 export const getMonthlyPlan = catchAsync(async (req, res, next) => {
@@ -91,10 +81,16 @@ export const getMonthlyPlan = catchAsync(async (req, res, next) => {
         {
             $sort: { month: 1 },
         },
-        // {
-        //     $limit:2
-        // }
+        {
+            $limit: 12,
+        },
     ]);
 
-    res.status(201).send(plan);
+    res.status(201).json(plan);
 });
+
+export const getTours = getAll(Tour);
+export const getTour = getOne(Tour, { path: 'reviews' });
+export const createTour = createOne(Tour);
+export const updateTour = updateOne(Tour);
+export const deleteTour = deleteOne(Tour);

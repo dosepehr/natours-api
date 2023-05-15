@@ -115,11 +115,18 @@ const TourSchema = mongoose.Schema(
 );
 TourSchema.index({ price: 1 });
 
+// virtual property
+TourSchema.virtual('durationWeeks').get(function () {
+    return this.duration / 7;
+});
+
+// document middleware, runs before .save() and .create()
 TourSchema.pre('save', function (next) {
     this.slug = slugify(this.name, { lower: true });
     next();
 });
 TourSchema.pre(/^find/, function (next) {
+    // this.find({ secretTour: { $ne: true } });
     this.populate({
         path: 'guides',
         select: '-__v -passwordChangedAt',

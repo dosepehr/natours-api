@@ -18,6 +18,9 @@ const tourRoute = express.Router();
 // ! nesting these two routes
 tourRoute.use('/:tourId/reviews', reviewRoute);
 
+// * Route --> http://localhost:5000/api/v1/tours/stats
+tourRoute.route('/stats').get(getTourStats);
+
 // * Route --> http://localhost:5000/api/v1/tours
 tourRoute
     .route('/')
@@ -41,9 +44,6 @@ tourRoute.route('/:id').get(getTour);
 
 //  * Route --> http://localhost:5000/api/v1/tours/top-tours
 tourRoute.route('/top-tours').get(topToursAlias, getTours);
-
-// * Route --> http://localhost:5000/api/v1/tours/stats
-tourRoute.route('/stats').get(getTourStats);
 
 // * Route --> http://localhost:5000/api/v1/tours/monthly-plan/:year
 tourRoute
