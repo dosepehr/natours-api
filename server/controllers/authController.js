@@ -10,13 +10,12 @@ import dotenv from 'dotenv';
 dotenv.config({ path: './config.env' });
 
 export const signup = catchAsync(async (req, res, next) => {
-    const { name, email, password, confirmPassword, role } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
     const newUser = await User.create({
         name,
         email,
         password,
         confirmPassword,
-        role,
     });
     new Email(newUser, `${req.protocol}://${req.get('host')}/me`).sendWelcome();
 
