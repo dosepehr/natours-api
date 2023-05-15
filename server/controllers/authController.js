@@ -45,7 +45,7 @@ export const protect = catchAsync(async (req, res, next) => {
     let token;
     if (
         req.headers.authorization &&
-        req.hejwtaders.authorization.startsWith('Bearer')
+        req.headers.authorization.startsWith('Bearer')
     ) {
         token = req.headers.authorization.split(' ')[1];
     } else if (req.cookies.jwt) {
@@ -115,7 +115,7 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
         const resetURL = `${req.protocol}://${req.get(
             'host'
         )}/api/v1/users/resetPassword/${resetToken}`;
-        await new Email(user, resetURL).sendPasswordReset()
+        await new Email(user, resetURL).sendPasswordReset();
         res.status(200).json({
             status: 'success',
             message: 'Token sent to email!',

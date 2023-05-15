@@ -18,15 +18,22 @@ import ErrorHandler from './utils/errorHandler.js';
 import reviewRoute from './routes/reviewRoute.js';
 import bookingRoute from './routes/bookingRoute.js';
 import viewRoute from './routes/viewRoute.js';
-
 import { errorController } from './controllers/errorController.js';
+
 dotenv.config({ path: './config.env' });
+
+process.on('uncaughtException', (err) => {
+    console.log(err.name, err.message);
+    console.log('UNCAUGHT REJECTION');
+    process.exit(1);
+});
+
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const server = express();
-server.set('view engine', 'pug');
-server.set('views', path.join(__dirname, 'views'));
+const app = express();
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 // Serving static files
-server.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // security
 // limiting requests
@@ -35,23 +42,23 @@ const limiter = rateLimit({
     windowMs: 60 * 60 * 1000,
     message: 'too many requests from this IP, please try again in an hour',
 });
-server.use(helmet());
-server.use('/api', limiter);
+app.use(helmet());
+app.use('/api', limiter);
 
 if (process.env.NODE_ENV == 'development') {
-    server.use(morgan('dev'));
+    app.use(morgan('dev'));
 }
 
-server.use(cors());
-server.use(bodyParser.json({ limit: '10kb' }));
-server.use(cookieParser());
+app.use(cors());
+app.use(bodyParser.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 // data sanitization against NoSQL query injection
-server.use(mongoSanitize());
+app.use(mongoSanitize());
 // data sanitization against XSS
-server.use(xss());
+app.use(xss());
 // Prevent parameter pollution
-server.use(
+app.use(
     hpp({
         whitelist: [
             'duration',
@@ -65,26 +72,37 @@ server.use(
 );
 
 // connection
-mongoose.connect(process.env.MONGO_URL).then(() => {
-    console.log('db connected');
-});
+mongoose
+    .connect(process.env.MONGO_URL)
+    .then(() => {
+        console.log('db connected');
+    })
+    .catch('error in db');
 mongoose.Promise = global.Promise;
 // routes
-server.use('/api/v1/tours', tourRoute);
-server.use('/api/v1/users', userRoute);
-server.use('/api/v1/reviews', reviewRoute);
-server.use('/api/v1/booking', bookingRoute);
-server.use('/', viewRoute);
+app.use('/api/v1/tours', tourRoute);
+app.use('/api/v1/users', userRoute);
+app.use('/api/v1/reviews', reviewRoute);
+app.use('/api/v1/booking', bookingRoute);
+app.use('/', viewRoute);
 
 // a route for undefined routes
-server.all('*', (req, res, next) => {
-    next(new ErrorHandler(`can't fint ${req.originalUrl} on this server`, 404));
+app.all('*', (req, res, next) => {
+    next(new ErrorHandler(`can't find ${req.originalUrl} on this app`, 404));
 });
 
-server.use(errorController);
+app.use(errorController);
 
-// run server on port
+// run app on port
 const port = process.env.PORT || 5080;
-server.listen(port, () => {
-    console.log(`server running on port ${port}`);
+const server = app.listen(port, () => {
+    console.log(`app running on port ${port}`);
+});
+
+process.on('unhandledRejection', (err) => {
+    console.log(err.name, err.message);
+    console.log('UNHANDLED REJECTION');
+    server.close(() => {
+        process.exit(1);
+    });
 });
