@@ -12,7 +12,7 @@ import hpp from 'hpp';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit';
-import tourRoute from './routes/TourRoute.js';
+import tourRoute from './routes/tourRoute.js';
 import userRoute from './routes/userRoute.js';
 import ErrorHandler from './utils/errorHandler.js';
 import reviewRoute from './routes/reviewRoute.js';
