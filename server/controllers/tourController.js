@@ -89,7 +89,7 @@ export const getMonthlyPlan = catchAsync(async (req, res, next) => {
     res.status(201).json(plan);
 });
 
-export const getTours = getAll(Tour);
+export const getTours = getAll(Tour, { path: 'reviews' });
 export const getTour = getOne(Tour, { path: 'reviews' });
 export const createTour = createOne(Tour);
 export const updateTour = updateOne(Tour);

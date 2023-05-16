@@ -143,9 +143,9 @@ TourSchema.virtual('reviews', {
 });
 
 // ? what is the diffrence between guide and review population? why we did virtual population on reviews?
-// * we populate guides in TourModel,so we access guides in get tour
-// * we populate reviews in ReviesModel,so we access guides in get review
-// * but to get access to reviews in get tour,we need to use virtual population
+// * we populate guides in TourModel,so we access guides in get tour --- child refrencing,we store in parent(tour) its children(guide)
+// * we populate tour in ReviewsModel,so we access tour in get review
+// * but to get access to reviews in get tour,we need to use virtual population --- parent refrencing,we store in child(review) its parent(tour)
 
 // ! modelling tour guides embedding
 // TourSchema.pre('save', async function (next) {
