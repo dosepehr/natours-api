@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import Tour from './TourModel.js';
-const ReviewSchema = mongoose.Schema(
+const ReviewSchema = new mongoose.Schema(
     {
         content: {
             type: String,
-            required: true,
+            required: [true, 'Review can not be empty!'],
         },
         rating: {
             type: Number,
@@ -13,7 +13,7 @@ const ReviewSchema = mongoose.Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now(),
+            default: Date.now,
         },
         tour: {
             type: mongoose.Schema.ObjectId,
@@ -31,24 +31,33 @@ const ReviewSchema = mongoose.Schema(
         toObject: { virtuals: true },
     }
 );
-// each user , one review on tour
+
 ReviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 ReviewSchema.pre(/^find/, function (next) {
-    //* we comment this code to prevent chaining in our app
     // this.populate({
-    //     path: 'tour',
-    //     select: 'name',
+    //   path: 'tour',
+    //   select: 'name'
     // }).populate({
-    //     path: 'user',
-    //     select: 'name photo',
+    //   path: 'user',
+    //   select: 'name photo'
     // });
 
     this.populate({
         path: 'user',
         select: 'name photo',
     });
-
     next();
+});
+
+ReviewSchema.post('save', function () {
+    this.constructor.calcAverageRatings(this.tour);
+});
+// calculate ratings avg and quantity whe a review has been updated or deleted
+ReviewSchema.post(/^findOneAnd/, async function (doc) {
+    if (doc) {
+        await doc.constructor.calcAverageRatings(doc.tour);
+    }
 });
 
 ReviewSchema.statics.calcAverageRatings = async function (tourId) {
@@ -77,10 +86,6 @@ ReviewSchema.statics.calcAverageRatings = async function (tourId) {
     }
 };
 
-ReviewSchema.post('save', function () {
-    // this points to current review
-    this.constructor.calcAverageRatings(this.tour);
-});
-let Review = mongoose.model('Review', ReviewSchema);
+const Review = mongoose.model('Review', ReviewSchema);
 
 export default Review;
