@@ -17,6 +17,10 @@ export const setTourUserIds = (req, res, next) => {
 };
 
 export const checkUser = catchAsync(async (req, res, next) => {
+    if (req.user.role === 'admin') {
+        return next();
+    }
+
     const review = await Review.findById(req.params.id);
     if (!review) {
         return next(
@@ -27,7 +31,9 @@ export const checkUser = catchAsync(async (req, res, next) => {
     if (review.user.id === req.user.id) {
         next();
     } else {
-        return next(new ErrorHandler("you can't edit this review!", 401));
+        return next(
+            new ErrorHandler("this review doesn't belong to you!", 401)
+        );
     }
 });
 

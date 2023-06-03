@@ -23,7 +23,7 @@ reviewRoute
 
 reviewRoute
     .route('/:id')
-    .delete(restrictTo('admin', 'user'), deleteReview)
+    .delete(restrictTo('admin', 'user'), checkUser,deleteReview)
     .patch(restrictTo('admin', 'user'), checkUser, updateReview)
     .get(getReview);
 
