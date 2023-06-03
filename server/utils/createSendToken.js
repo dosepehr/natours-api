@@ -24,12 +24,3 @@ export const createSendToken = (user, statusCode, res) => {
         },
     });
 };
-
-//! this util function stands for this code below
-
-// const token = signToken(newUser._id);
-// res.status(201).json({
-//     status: 'success',
-//     token,
-//     user: newUser,
-// });

@@ -17,7 +17,10 @@ export const signup = catchAsync(async (req, res, next) => {
         password,
         confirmPassword,
     });
-    new Email(newUser, `${req.protocol}://${req.get('host')}/me`).sendWelcome();
+    await new Email(
+        newUser,
+        `${req.protocol}://${req.get('host')}/me`
+    ).sendWelcome();
 
     createSendToken(newUser, 201, res);
 });

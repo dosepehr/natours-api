@@ -54,7 +54,7 @@ ReviewSchema.pre(/^find/, function (next) {
 ReviewSchema.post('save', function () {
     this.constructor.calcAverageRatings(this.tour);
 });
-// calculate ratings avg and quantity whe a review has been updated or deleted
+// recalculate ratings avg and quantity when a review has been updated or deleted
 ReviewSchema.post(/^findOneAnd/, async function (doc) {
     if (doc) {
         await doc.constructor.calcAverageRatings(doc.tour);
