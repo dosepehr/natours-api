@@ -20,13 +20,15 @@ import bookingRoute from './routes/bookingRoute.js';
 import viewRoute from './routes/viewRoute.js';
 import { errorController } from './controllers/errorController.js';
 
-dotenv.config({ path: './config.env' });
 
 process.on('uncaughtException', (err) => {
+    console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message);
-    console.log('UNCAUGHT REJECTION');
     process.exit(1);
 });
+
+dotenv.config({ path: './config.env' });
+
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const app = express();
@@ -100,8 +102,8 @@ const server = app.listen(port, () => {
 });
 
 process.on('unhandledRejection', (err) => {
+    console.log('UNHANDLED REJECTION! 💥 Shutting down...');
     console.log(err.name, err.message);
-    console.log('UNHANDLED REJECTION');
     server.close(() => {
         process.exit(1);
     });
